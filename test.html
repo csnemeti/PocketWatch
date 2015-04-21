@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pocket Watch test page</title>
+
+	<script type="text/javascript" src="pfa-pocket-watch.js"></script>
+	<script type="text/javascript">
+	</script>
+</head>
+
+<body>
+	<div id="watchWrapper1" style="position:absolute; top: 50px; left: 100px; width: 400px; height: 400px; background-color: #cacaca; border: 1px solid black">
+		<div id="watch1"></div>
+		<input type="button" name="start1" value="Start" onclick="watch1.start()" />
+		<input type="button" name="stop1"  value="Stop"  onclick="watch1.stop()" />
+	</div>
+	<div id="watchWrapper2" style="position:absolute; top: 150px; left: 600px; width: 400px; height: 400px; background-color: #cacaca; border: 1px solid black">
+		<div id="watch2"></div>
+		<input type="button" name="start2" value="Start" onclick="watch2.start()" />
+		<input type="button" name="stop2"  value="Stop"  onclick="watch2.stop()" />
+	</div>
+	<div id="watchWrapper3" style="position:absolute; top: 200px; left: 1100px; width: 400px; height: 400px; background-color: #cacaca; border: 1px solid black">
+		<div id="watch3"></div>
+		<input type="button" name="start3" value="Start" onclick="watch3.start()" />
+		<input type="button" name="stop3"  value="Stop"  onclick="watch3.stop()" />
+	</div>
+</body>
+	<script type="text/javascript">
+		var watch1 = new pfaAllianceClock('watch1', null);
+		watch1.start();
+		
+		var opt2 = {
+			showSeconds : true,
+			showDate : false
+		};
+		var watch2 = new pfaAllianceClock('watch2', opt2);
+		watch2.start();
+		
+		var opt3 = {
+			sound : true,
+			showSeconds : false,
+			showDate : true,
+			days: ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"],
+			monthsAbbr: ["Jan", "Feb", "Már", "Ápr", "Maj", "Jun", "Jul", "Aug", "Szep", "Okt", "Nov", "Dec"]
+		};
+		var watch3 = new pfaAllianceClock('watch3', opt3);
+		watch3.start();
+	</script>
+</html>
