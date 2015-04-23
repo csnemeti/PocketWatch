@@ -2,7 +2,7 @@
 var js = document.createElement("script");
 js.type = "text/javascript";
 js.src = "progressbar.min.js";
-//document.getElementsByTagName('head')[0].appendChild(js);
+document.getElementsByTagName('head')[0].appendChild(js);
 
 var style = document.createElement('style');
 style.type = 'text/css';
@@ -194,29 +194,29 @@ function analogDigitalClockInit(theClock){
 	if (theClock.options.showDate){
 		// the name of the day
 		theDiv = document.createElement("DIV");
-		theDiv.id = divId;
+		theDiv.id = "dayNameDiv" + theClock.clockIndex;
 		theDiv.className = 'analogDigitalClockDoW';
 		var dayName = theClock.options.days[nowIs.getDay()];
 		theDiv.innerHTML = dayName;  
 		theClock.div.appendChild(theDiv);
-		theClock[theDiv.id ] = theDiv;
-		theClock[theDiv.id  + ".value"] = nowIs.getDay();
+		theClock["dayName"] = theDiv;
+		theClock["dayName.value"] = nowIs.getDay();
 		
-		// the day
+		// the year
 		theDiv = document.createElement("DIV");
-		theDiv.id = "dayDiv" + theClock.clockIndex;
-		theDiv.className = 'analogDigitalClockDay';
+		theDiv.id = "yearDiv" + theClock.clockIndex;
+		theDiv.className = 'analogDigitalClockYear';
 		theClock.div.appendChild(theDiv);
-		theClock[theDiv.id + ".value"] = nowIs.getDate();
-		var days = new ProgressBar.Circle(theDiv, {
+		theClock[theDiv.id + ".value"] = nowIs.getMonth();
+		var years = new ProgressBar.Circle(theDiv, {
 			duration: 200,
 			color: "#000000",
 			trailWidth: 3,
 			strokeWidth: 3,
 			trailColor: "#ddd"
 		});
-		theClock["day"] = days;
-		analogDigitalClockSetDayProgress(nowIs, days);
+		theClock["year"] = years;
+		analogDigitalClockSetYearProgress(nowIs, years);
 		// the progressbar sets the position: relative and make all looks wrong
 		theDiv.style.position = "absolute";
 
@@ -238,26 +238,27 @@ function analogDigitalClockInit(theClock){
 		// the progressbar sets the position: relative and make all looks wrong
 		theDiv.style.position = "absolute";
 		
-		// the year
+		// the day
 		theDiv = document.createElement("DIV");
-		theDiv.id = "yearDiv" + theClock.clockIndex;
-		theDiv.className = 'analogDigitalClockYear';
+		theDiv.id = "dayDiv" + theClock.clockIndex;
+		theDiv.className = 'analogDigitalClockDay';
 		theClock.div.appendChild(theDiv);
-		theClock[theDiv.id + ".value"] = nowIs.getMonth();
-		var years = new ProgressBar.Circle(theDiv, {
+		theClock[theDiv.id + ".value"] = nowIs.getDate();
+		var days = new ProgressBar.Circle(theDiv, {
 			duration: 200,
 			color: "#000000",
 			trailWidth: 3,
 			strokeWidth: 3,
 			trailColor: "#ddd"
 		});
-		theClock["year"] = years;
-		analogDigitalClockSetYearProgress(nowIs, years);
+		theClock["day"] = days;
+		theClock["day.value"] = "";
+		analogDigitalClockSetDayProgress(nowIs, theClock);
 		// the progressbar sets the position: relative and make all looks wrong
 		theDiv.style.position = "absolute";
 	} else {
 		// we add this in order to make time updating easier. We can check if this value > -1 => we have day div
-		theClock[divId + ".value"] = -1;
+		theClock["dayName.value"] = -1;
 	}	
 	console.log("dayNameDiv: ", theDiv);
 	// the time
@@ -273,28 +274,58 @@ function analogDigitalClockRender(clockIndex){
 	// preparation
 	var theClock = pfaAllianceClocks[clockIndex];
 	var timeDiv = theClock["timeDiv" + clockIndex];
-	var dayIndexValue = theClock["dayNameDiv" + clockIndex + ".value"];
+	var dayIndexValue = theClock["dayName.value"];
 	// get current time
 	var nowIs = new Date();
 	// set the new time
 	timeDiv.innerHTML = analogDigitalClockFormatTime(nowIs, theClock.options.showSeconds);
 	// change day name if necessary
-	if (dayIndexValue > -1 && dayIndexValue != nowIs.getDay()){
-		theClock["dayNameDiv" + clockIndex + ".value"] = nowIs.getDay();
-		theClock["dayNameDiv" + clockIndex].innerHTML = theClock.options.days[nowIs.getDay()];
+	if (dayIndexValue > -1){
+		if (dayIndexValue != nowIs.getDay()) {
+			theClock["dayNameDiv" + clockIndex + ".value"] = nowIs.getDay();
+			theClock["dayNameDiv" + clockIndex].innerHTML = theClock.options.days[nowIs.getDay()];
+		}
+		analogDigitalClockSetDayProgress(nowIs, theClock);
 	}
 }
+/**
+ * This method returns a formated time
+ * @param currentTime - Date object representing curent time
+ * @param addSeconds  - boolean flag indicating to add or not the seconds
+ * @return the formated time
+ */
 function analogDigitalClockFormatTime(currentTime, addSeconds){
 	return twoDigits(currentTime.getHours()) + " : " + twoDigits(currentTime.getMinutes()) + ((addSeconds)? " : " + twoDigits(currentTime.getSeconds()) : "");
 }
-function analogDigitalClockSetDayProgress(nowIs, days){
-	days.animate(nowIs.getHours() / 24);
-	days.setText(nowIs.getDate());
+function analogDigitalClockSetDayProgress(nowIs, theClock){
+	var dayValue = nowIs.getHours() * 6 + nowIs.getMinutes() / 10;
+	var fullDayValue = nowIs.getDate() + ":" + dayValue;
+	//console.log("Current day value: ", theClock["day.value"], ", calculated value: ", fullDayValue);
+	if (fullDayValue != theClock["day.value"]) {
+		var days = theClock["day"];
+		days.animate(dayValue / (24 * 6));
+		days.setText(nowIs.getDate());
+		theClock["day.value"] = fullDayValue;
+		console.log("Changing current day value: ", fullDayValue);
+		// update the other values too from progress bar
+		analogDigitalClockSetMonthProgress(nowIs, theClock["month"], theClock.options.monthsAbbr);
+		analogDigitalClockSetYearProgress(nowIs, theClock["year"]);
+	}
 }
+/**
+ * Configure the MONTH progressbar.
+ * @param nowIs - Date object representing the current time
+ * @param years - the MONTH progress bar
+ */
 function analogDigitalClockSetMonthProgress(nowIs, months, monthsNames){
 	months.animate((nowIs.getDate() - 1) / getLastDayOfMonth(nowIs.getMonth(), nowIs.getFullYear()));
 	months.setText(monthsNames[nowIs.getMonth()]);
 }
+/**
+ * Configure the YEAR progressbar.
+ * @param nowIs - Date object representing the current time
+ * @param years - the YEAR progress bar
+ */
 function analogDigitalClockSetYearProgress(nowIs, years){
 	years.animate((getDaysSinceBeginningOfYear(nowIs) - 1) / getNumberOfDaysFromYear(nowIs.getFullYear()));
 	years.setText(nowIs.getFullYear());

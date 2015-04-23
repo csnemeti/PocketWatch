@@ -8,46 +8,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pocket Watch test page</title>
 
-	<script type="text/javascript" src="progressbar.min.js"></script>
 	<script type="text/javascript" src="pfa-pocket-watch.js"></script>
-</head>
 
-<body>
-	<div id="watchWrapper1" style="position:absolute; top: 50px; left: 100px; width: 400px; height: 400px; background-color: #cacaca; border: 1px solid black">
+	<script type="text/javascript">	
+		var watch1 = null, watch2 = null, watch3 = null, watch4 = null;
+		function setUpWatches(){
+			watch1 = new pfaAllianceClock('watch1', null);
+			watch1.start();
+			
+			var opt2 = {
+				showSeconds : true,
+				showDate : false
+			};
+			watch2 = new pfaAllianceClock('watch2', opt2);
+			watch2.start();
+			
+			var opt3 = {
+				sound : true,
+				showSeconds : false,
+				showDate : true,
+				days: ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"],
+				monthsAbbr: ["Jan", "Feb", "Már", "Ápr", "Maj", "Jun", "Jul", "Aug", "Szep", "Okt", "Nov", "Dec"]
+			};
+			watch3 = new pfaAllianceClock('watch3', opt3);
+			watch3.start();
+			
+			var opt4 = {
+				sound : true,
+				showSeconds : true,
+				showDate : true,
+				days: ["7 / 7", "1 / 7", "2 / 7", "3 / 7", "4 / 7", "5 / 7", "6 / 7"],
+				monthsAbbr: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+			};
+			watch4 = new pfaAllianceClock('watch4', opt4);
+			watch4.start();
+		}
+	</script>
+</head>
+<body onLoad="setUpWatches()">
+	<div id="watchWrapper1" style="position:absolute; top: 50px; left: 50px; background-color: #cacaca; border: 1px solid black">
 		<div id="watch1"></div>
 		<input type="button" name="start1" value="Start" onclick="watch1.start()" />
 		<input type="button" name="stop1"  value="Stop"  onclick="watch1.stop()" />
 	</div>
-	<div id="watchWrapper2" style="position:absolute; top: 150px; left: 600px; width: 400px; height: 400px; background-color: #cacaca; border: 1px solid black">
+	<div id="watchWrapper2" style="position:absolute; top: 150px; left: 450px; background-color: #cacaca; border: 1px solid black">
 		<div id="watch2"></div>
 		<input type="button" name="start2" value="Start" onclick="watch2.start()" />
 		<input type="button" name="stop2"  value="Stop"  onclick="watch2.stop()" />
 	</div>
-	<div id="watchWrapper3" style="position:absolute; top: 200px; left: 1100px; width: 400px; height: 400px; background-color: #cacaca; border: 1px solid black">
+	<div id="watchWrapper3" style="position:absolute; top: 200px; left: 850px; background-color: #cacaca; border: 1px solid black">
 		<div id="watch3"></div>
 		<input type="button" name="start3" value="Start" onclick="watch3.start()" />
 		<input type="button" name="stop3"  value="Stop"  onclick="watch3.stop()" />
 	</div>
+	<div id="watchWrapper4" style="position:absolute; top: 250px; left: 1250px; background-color: #cacaca; border: 1px solid black">
+		<div id="watch4"></div>
+		<input type="button" name="start4" value="Start" onclick="watch4.start()" />
+		<input type="button" name="stop4"  value="Stop"  onclick="watch4.stop()" />
+	</div>
 </body>
-	<script type="text/javascript">
-		var watch1 = new pfaAllianceClock('watch1', null);
-		watch1.start();
-		
-		var opt2 = {
-			showSeconds : true,
-			showDate : false
-		};
-		var watch2 = new pfaAllianceClock('watch2', opt2);
-		watch2.start();
-		
-		var opt3 = {
-			sound : true,
-			showSeconds : false,
-			showDate : true,
-			days: ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"],
-			monthsAbbr: ["Jan", "Feb", "Már", "Ápr", "Maj", "Jun", "Jul", "Aug", "Szep", "Okt", "Nov", "Dec"]
-		};
-		var watch3 = new pfaAllianceClock('watch3', opt3);
-		watch3.start();
-	</script>
 </html>
