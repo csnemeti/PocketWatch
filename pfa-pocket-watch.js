@@ -177,7 +177,7 @@ function loadTheme_analog_digital(){
 		height : 357,
 		background :  null,
 		backgroundColor :  null,
-		backgroundImage : "url('images/watch/analog-digital2.png')",
+		backgroundImage : "url('images/watch/analog-digital.png')",
 		initMethod : analogDigitalClockInit,
 		renderMethod : analogDigitalClockRender
 	};
