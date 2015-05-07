@@ -1,7 +1,18 @@
 // --------------- Add some CSS classes and some JS file(s) ----------
+var urlStart = null;
+for(var els = document.getElementsByTagName ('script'), i = els.length; i--;){
+    // els[i].id !== "myId" && (els[i].style.display = "none");	
+	if(els[i].src && els[i].src.indexOf("pfa-pocket-watch") >= 0){
+		urlStart = els[i].src.substring(0, els[i].src.indexOf("pfa-pocket-watch"));
+	}
+}
+if(urlStart == null){
+	alert("Could not identify path to our JS!\nWatch will not work...");
+	urlStart = "";
+}
 var js = document.createElement("script");
 js.type = "text/javascript";
-js.src = "progressbar.min.js";
+js.src = urlStart + "progressbar.min.js";
 document.getElementsByTagName('head')[0].appendChild(js);
 
 var style = document.createElement('style');
@@ -177,7 +188,7 @@ function loadTheme_analog_digital(){
 		height : 357,
 		background :  null,
 		backgroundColor :  null,
-		backgroundImage : "url('images/watch/analog-digital.png')",
+		backgroundImage : "url('" + urlStart + "pfa-pocket-watch-themes/analog-digital.png')",
 		initMethod : analogDigitalClockInit,
 		renderMethod : analogDigitalClockRender
 	};

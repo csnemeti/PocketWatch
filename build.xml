@@ -4,28 +4,33 @@
     </description>
 	
 	<!-- The global variables -->
-	<property name="version" location="0.2" />
+	<property name="version" value="0.2" />
 	
 	<!-- Build related properties-->
 	<property name="src.dir" location="src" />
-	<property name="examples.dir" location="examples" />
+	<property name="build.dir" location="build" />
 	<property name="dist.dir" location="dist" />
 
 	<target name="clean" description="Clean the distribution directory">
-		<delete dir="${examples.dir}" />
 		<delete dir="${dist.dir}" />
+		<delete dir="${build.dir}" />
 	</target>
-	<target name="dist" description="Generate the distribution" >
-		<mkdir dir="${dist.dir}"/>
-		<mkdir dir="${examples.dir}"/>
-		<copy todir="${examples.dir}">
+	<target name="build" depends="clean" description="Generate the build" >
+		<mkdir dir="${build.dir}/examples"/>
+		<mkdir dir="${build.dir}/lib"/>
+		<copy todir="${build.dir}/examples">
             <fileset dir="${src.dir}"/>
         </copy>
-		<copy todir="${dist.dir}">
+		<copy todir="${build.dir}/lib">
             <fileset dir="${src.dir}">
             	<include name="**/*.*" />
             	<exclude name="**/*.htm*" />
             </fileset>
         </copy>
+	</target>
+	<target name="dist" depends="build" description="Generate the distribution">
+		<mkdir dir="${dist.dir}"/>
+		<zip destfile="${dist.dir}/pocket-watch-${version}.zip"
+		       basedir="${build.dir}" update="true" />
 	</target>
 </project>

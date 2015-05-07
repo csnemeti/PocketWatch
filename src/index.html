@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pocket Watch test page</title>
 
-	<script type="text/javascript" src="pfa-pocket-watch.js"></script>
+	<script type="text/javascript" src="js/pfa-pocket-watch.js"></script>
 
 	<script type="text/javascript">	
 		var watch1 = null, watch2 = null, watch3 = null, watch4 = null;
@@ -28,7 +28,7 @@
 				showSeconds : false,
 				showDate : true,
 				days: ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"],
-				monthsAbbr: ["Jan", "Feb", "Már", "Ápr", "Maj", "Jun", "Jul", "Aug", "Szep", "Okt", "Nov", "Dec"]
+				monthsAbbr: ["Jan", "Feb", "Már", "Ápr", "Máj", "Jun", "Jul", "Aug", "Szep", "Okt", "Nov", "Dec"]
 			};
 			watch3 = new pfaAllianceClock('watch3', opt3);
 			watch3.start();
@@ -46,25 +46,33 @@
 	</script>
 </head>
 <body onLoad="setUpWatches()">
-	<div id="watchWrapper1" style="position:absolute; top: 50px; left: 50px; background-color: #cacaca; border: 1px solid black">
+	<div id="watchWrapper1" style="position:absolute; top: 50px; left: 50px;">
 		<div id="watch1"></div>
-		<input type="button" name="start1" value="Start / Resume" onclick="watch1.start()" />
-		<input type="button" name="stop1"  value="Pause"  onclick="watch1.stop()" />
+		<div style="padding-top: 20px; width: 100%; text-align: center">
+			<input type="button" name="start1" value="Start / Resume" onclick="watch1.start()" />
+			<input type="button" name="stop1"  value="Pause"  onclick="watch1.stop()" />
+		</div>
 	</div>
-	<div id="watchWrapper2" style="position:absolute; top: 150px; left: 450px; background-color: #cacaca; border: 1px solid black">
+	<div id="watchWrapper2" style="position:absolute; top: 150px; left: 450px;">
 		<div id="watch2"></div>
-		<input type="button" name="start2" value="Start / Resume" onclick="watch2.start()" />
-		<input type="button" name="stop2"  value="Pause"  onclick="watch2.stop()" />
+		<div style="padding-top: 20px; width: 100%; text-align: center">
+			<input type="button" name="start2" value="Start / Resume" onclick="watch2.start()" />
+			<input type="button" name="stop2"  value="Pause"  onclick="watch2.stop()" />
+		</div>
 	</div>
-	<div id="watchWrapper3" style="position:absolute; top: 200px; left: 850px; background-color: #cacaca; border: 1px solid black">
+	<div id="watchWrapper3" style="position:absolute; top: 200px; left: 850px;">
 		<div id="watch3"></div>
-		<input type="button" name="start3" value="Start / Resume" onclick="watch3.start()" />
-		<input type="button" name="stop3"  value="Pause"  onclick="watch3.stop()" />
+		<div style="padding-top: 20px; width: 100%; text-align: center">
+			<input type="button" name="start3" value="Start / Resume" onclick="watch3.start()" />
+			<input type="button" name="stop3"  value="Pause"  onclick="watch3.stop()" />
+		</div>
 	</div>
-	<div id="watchWrapper4" style="position:absolute; top: 250px; left: 1250px; background-color: #cacaca; border: 1px solid black">
+	<div id="watchWrapper4" style="position:absolute; top: 250px; left: 1250px;">
 		<div id="watch4"></div>
-		<input type="button" name="start4" value="Start / Resume" onclick="watch4.start()" />
-		<input type="button" name="stop4"  value="Pause"  onclick="watch4.stop()" />
+		<div style="padding-top: 20px; width: 100%; text-align: center">
+			<input type="button" name="start4" value="Start / Resume" onclick="watch4.start()" />
+			<input type="button" name="stop4"  value="Pause"  onclick="watch4.stop()" />
+		</div>
 	</div>
 </body>
 </html>
