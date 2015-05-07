@@ -1,0 +1,31 @@
+<project name="PocketWatch" default="dist" basedir=".">
+	<description>
+        PocketWatch build file
+    </description>
+	
+	<!-- The global variables -->
+	<property name="version" location="0.2" />
+	
+	<!-- Build related properties-->
+	<property name="src.dir" location="src" />
+	<property name="examples.dir" location="examples" />
+	<property name="dist.dir" location="dist" />
+
+	<target name="clean" description="Clean the distribution directory">
+		<delete dir="${examples.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
+	<target name="dist" description="Generate the distribution" >
+		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${examples.dir}"/>
+		<copy todir="${examples.dir}">
+            <fileset dir="${src.dir}"/>
+        </copy>
+		<copy todir="${dist.dir}">
+            <fileset dir="${src.dir}">
+            	<include name="**/*.*" />
+            	<exclude name="**/*.htm*" />
+            </fileset>
+        </copy>
+	</target>
+</project>
