@@ -69,10 +69,11 @@
 		</zip>
 	</target>
 	<target name="ftpdist" depends="dist" if="BRANCH">
-		<ftp action="mkdir"
-		       server="${ftp.host}"
-		       userid="${ftp.userid}"
-		       password="${fim.passwd}"
-		       remotedir="pw/${BRANCH}/${BUILD_ID}"/> 
+		<ftp action="mkdir" 
+		     server="${ftp.host}" userid="${ftp.userid}" password="${fim.passwd}" remotedir="pw/${BRANCH}/${BUILD_ID}"/>
+		<ftp server="${ftp.host}" userid="${ftp.userid}" password="${fim.passwd}" remotedir="pw/${BRANCH}/${BUILD_ID}">
+			<fileset dir="${dist.dir}"/>
+		</ftp>
+
 	</target>
 </project>
