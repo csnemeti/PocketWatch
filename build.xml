@@ -6,6 +6,10 @@
 	<!-- The global variables -->
 	<property name="version" value="0.2" />
 	
+	<condition property="build.version" value="${version}.${BUILD_ID}" else="${version}">
+		<isset property="BUILD_ID" />
+	</condition>
+	
 	<!-- Build related properties-->
 	<property name="src.dir" location="src" />
 	<property name="build.dir" location="build" />
@@ -55,7 +59,7 @@
 	</target>
 	<target name="dist" depends="build" description="Generate the distribution">
 		<mkdir dir="${dist.dir}"/>
-		<zip destfile="${dist.dir}/pocket-watch-${version}.zip" update="true">
+		<zip destfile="${dist.dir}/pocket-watch-${build.version}.zip" update="true">
 			<fileset dir="${build.dir}">
             	<include name="**/*.*" />
             	<exclude name="temp/**/*" />
