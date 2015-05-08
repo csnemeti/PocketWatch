@@ -4,8 +4,7 @@
     </description>
 	
 	<!-- The global variables -->
-	<property name="version" value="0.2" />
-	
+	<property name="version" value="0.2" />	
 	<condition property="build.version" value="${version}.${BUILD_ID}" else="${version}">
 		<isset property="BUILD_ID" />
 	</condition>
@@ -25,13 +24,13 @@
 		<mkdir dir="${build.dir}/lib/js"/>
 
 		<copy file="${src.dir}/js/pfa-pocket-watch.js"
-				tofile="${build.dir}/temp/js/pfa-pocket-watch-${version}.js" />
+				tofile="${build.dir}/temp/js/pfa-pocket-watch-${build.version}.js" />
 		<copy todir="${build.dir}/temp">
             <fileset dir="${src.dir}">
             	<include name="**/*.htm*" />
             </fileset>
 			<filterset>
-				<filter token="VERSION" value="${version}"/>
+				<filter token="VERSION" value="${build.version}"/>
 			</filterset>
 		</copy>
 		
