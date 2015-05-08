@@ -293,8 +293,8 @@ function analogDigitalClockRender(clockIndex){
 	// change day name if necessary
 	if (dayIndexValue > -1){
 		if (dayIndexValue != nowIs.getDay()) {
-			theClock["dayNameDiv" + clockIndex + ".value"] = nowIs.getDay();
-			theClock["dayNameDiv" + clockIndex].innerHTML = theClock.options.days[nowIs.getDay()];
+			theClock["dayName.value"] = nowIs.getDay();
+			theClock["dayName"].innerHTML = theClock.options.days[nowIs.getDay()];
 		}
 		analogDigitalClockSetDayProgress(nowIs, theClock);
 	}

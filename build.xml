@@ -16,21 +16,50 @@
 		<delete dir="${build.dir}" />
 	</target>
 	<target name="build" depends="clean" description="Generate the build" >
-		<mkdir dir="${build.dir}/examples"/>
-		<mkdir dir="${build.dir}/lib"/>
+		<mkdir dir="${build.dir}/examples/js"/>
+		<mkdir dir="${build.dir}/temp/js"/>
+		<mkdir dir="${build.dir}/lib/js"/>
+
+		<copy file="${src.dir}/js/pfa-pocket-watch.js"
+				tofile="${build.dir}/temp/js/pfa-pocket-watch-${version}.js" />
+		<copy todir="${build.dir}/temp">
+            <fileset dir="${src.dir}">
+            	<include name="**/*.htm*" />
+            </fileset>
+			<filterset>
+				<filter token="VERSION" value="${version}"/>
+			</filterset>
+		</copy>
+		
+		
 		<copy todir="${build.dir}/examples">
-            <fileset dir="${src.dir}"/>
+            <fileset dir="${src.dir}">
+            	<include name="**/*.*" />
+            	<exclude name="**/*.htm*" />
+            	<exclude name="**/pfa-pocket-watch.js" />
+           	</fileset>
+            <fileset dir="${build.dir}/temp">
+            	<include name="**/*.*" />
+            </fileset>
         </copy>
 		<copy todir="${build.dir}/lib">
             <fileset dir="${src.dir}">
             	<include name="**/*.*" />
             	<exclude name="**/*.htm*" />
+            	<exclude name="**/pfa-pocket-watch.js" />
+            </fileset>
+            <fileset dir="${build.dir}/temp">
+            	<include name="**/*.js" />
             </fileset>
         </copy>
 	</target>
 	<target name="dist" depends="build" description="Generate the distribution">
 		<mkdir dir="${dist.dir}"/>
-		<zip destfile="${dist.dir}/pocket-watch-${version}.zip"
-		       basedir="${build.dir}" update="true" />
+		<zip destfile="${dist.dir}/pocket-watch-${version}.zip" update="true">
+			<fileset dir="${build.dir}">
+            	<include name="**/*.*" />
+            	<exclude name="temp/**/*" />
+			</fileset>
+		</zip>
 	</target>
 </project>
