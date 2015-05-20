@@ -176,7 +176,93 @@ function getDaysSinceBeginningOfYear(nowIs){
 	var oneDay = 1000 * 60 * 60 * 24;
 	return Math.floor(diff / oneDay);
 }
+// --------------- W3 -----------------------------------------------
+/**
+ * Load the theme specific options.
+ * @return the theme specific options (size, background, border, etc.)
+ */
+function loadTheme_w3(){
+	return {
+		width : 250,
+		height : 250,
+		background :  null,
+		backgroundColor :  null,
+		backgroundImage : "url('" + urlStart + "pfa-pocket-watch-themes/w3.jpg')",
+		initMethod : w3ClockInit,
+		renderMethod : w3ClockRender
+	};
+}
+/**
+ * Init the clock for this theme.
+ * @param theClock - the clock object
+ */
+function w3ClockInit(theClock){
+	console.log("Init the W3 clock");
+	var clockCanvas = document.createElement("canvas");
+	clockCanvas.width = 250;
+	clockCanvas.height = 250;
 
+	clockCanvas.style.position = "absolute";
+	clockCanvas.style.top = "0px";
+	clockCanvas.style.left = "0px";
+	
+	theClock.div.style.padding = "0px";
+	theClock.div.style.margin = "0px";
+	
+	theClock.div.appendChild(clockCanvas);
+	theClock.canvasContext = clockCanvas.getContext('2d');
+	theClock.canvasContext.translate(125, 125);
+}
+/**
+ * Render the time on clock. 
+ * @param clockIndex the index of the clock
+ */
+function w3ClockRender(clockIndex){	
+	console.log("Rendering the W3 clock");
+	var theClock = pfaAllianceClocks[clockIndex];
+	var ctx = theClock.canvasContext;
+	
+	ctx.clearRect(-125, -125, 250, 250);
+	
+	var radius = 110;
+	var now = new Date();
+    var hour = now.getHours();
+    var minute = now.getMinutes();
+    var second = now.getSeconds();
+    //hour
+    hour= hour % 12;
+    hour=(hour*Math.PI/6)+(minute*Math.PI/(6*60))+(second*Math.PI/(360*60));
+    drawHand(ctx, hour, radius*0.5, radius*0.07, 'white');
+    //minute
+    minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
+    drawHand(ctx, minute, radius*0.8, radius*0.07, 'white');
+    // second
+    second=(second*Math.PI/30);
+    drawHand(ctx, second, radius*0.9, radius*0.02, 'red');
+    
+    // draw inner dot (10px)
+	ctx.beginPath();
+	ctx.arc(0, 0, 10, 0, 2*Math.PI);
+	ctx.fillStyle = 'white';
+	ctx.fill();
+	
+	// add inner dot (4px)
+	ctx.beginPath();
+	ctx.arc(0, 0, 4, 0, 2*Math.PI);
+	ctx.fillStyle = 'black';
+	ctx.fill();
+}
+function drawHand(ctx, pos, length, width, color) {
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineCap = "round";
+    ctx.moveTo(0,0);
+    ctx.rotate(pos);
+    ctx.lineTo(0, -length);
+    ctx.stroke();
+    ctx.rotate(-pos);
+}
 // --------------- Analog - Digital theme methods --------------------
 /**
  * Load the theme specific options.
@@ -281,6 +367,10 @@ function analogDigitalClockInit(theClock){
 	theClock.div.appendChild(theDiv); 
 	theClock[theDiv.id] = theDiv;
 }
+/**
+ * Render the time on clock. 
+ * @param clockIndex the index of the clock
+ */
 function analogDigitalClockRender(clockIndex){	
 	// preparation
 	var theClock = pfaAllianceClocks[clockIndex];

@@ -11,7 +11,8 @@
 	<script type="text/javascript" src="js/pfa-pocket-watch-@VERSION@.js"></script>
 
 	<script type="text/javascript">	
-		var watch1 = null, watch2 = null, watch3 = null, watch4 = null;
+	var watch1 = null, watch2 = null, watch3 = null, watch4 = null;
+	var watch21 = null, watch22 = null, watch23 = null;
 		function setUpWatches(){
 			watch1 = new pfaAllianceClock('watch1', null);
 			watch1.start();
@@ -42,6 +43,15 @@
 			};
 			watch4 = new pfaAllianceClock('watch4', opt4);
 			watch4.start();
+
+			var opt21 = {
+					theme: "w3",
+					showSeconds : false,
+					showDate : false
+				};
+				watch21 = new pfaAllianceClock('watch21', opt21);
+				watch21.start();
+		
 		}
 	</script>
 </head>
@@ -72,6 +82,28 @@
 		<div style="padding-top: 20px; width: 100%; text-align: center">
 			<input type="button" name="start4" value="Start / Resume" onclick="watch4.start()" />
 			<input type="button" name="stop4"  value="Pause"  onclick="watch4.stop()" />
+		</div>
+	</div>
+
+	<div id="watchWrapper21" style="position:absolute; top: 500px; left: 50px;">
+		<div id="watch21"></div>
+		<div style="padding-top: 20px; width: 100%; text-align: center">
+			<input type="button" name="start21" value="Start / Resume" onclick="watch21.start()" />
+			<input type="button" name="stop21"  value="Pause"  onclick="watch21.stop()" />
+		</div>
+	</div>
+	<div id="watchWrapper22" style="position:absolute; top: 600px; left: 450px;">
+		<div id="watch22"></div>
+		<div style="padding-top: 20px; width: 100%; text-align: center">
+			<input type="button" name="start22" value="Start / Resume" onclick="watch22.start()" />
+			<input type="button" name="stop22"  value="Pause"  onclick="watch22.stop()" />
+		</div>
+	</div>
+	<div id="watchWrapper23" style="position:absolute; top: 650px; left: 850px;">
+		<div id="watch23"></div>
+		<div style="padding-top: 20px; width: 100%; text-align: center">
+			<input type="button" name="start23" value="Start / Resume" onclick="watch23.start()" />
+			<input type="button" name="stop23"  value="Pause"  onclick="watch23.stop()" />
 		</div>
 	</div>
 </body>
