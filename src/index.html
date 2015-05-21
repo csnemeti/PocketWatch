@@ -49,8 +49,24 @@
 					showSeconds : false,
 					showDate : false
 				};
-				watch21 = new pfaAllianceClock('watch21', opt21);
-				watch21.start();
+			watch21 = new pfaAllianceClock('watch21', opt21);
+			watch21.start();
+
+			var opt22 = {
+					theme: "w3",
+					showSeconds : true,
+					showDate : false
+				};
+			watch22 = new pfaAllianceClock('watch22', opt22);
+			watch22.start();
+
+			var opt23 = {
+					theme: "w3",
+					showSeconds : true,
+					showDate : true
+				};
+			watch23 = new pfaAllianceClock('watch23', opt23);
+			watch23.start();
 		
 		}
 	</script>
@@ -63,21 +79,21 @@
 			<input type="button" name="stop1"  value="Pause"  onclick="watch1.stop()" />
 		</div>
 	</div>
-	<div id="watchWrapper2" style="position:absolute; top: 150px; left: 450px;">
+	<div id="watchWrapper2" style="position:absolute; top: 50px; left: 450px;">
 		<div id="watch2"></div>
 		<div style="padding-top: 20px; width: 100%; text-align: center">
 			<input type="button" name="start2" value="Start / Resume" onclick="watch2.start()" />
 			<input type="button" name="stop2"  value="Pause"  onclick="watch2.stop()" />
 		</div>
 	</div>
-	<div id="watchWrapper3" style="position:absolute; top: 200px; left: 850px;">
+	<div id="watchWrapper3" style="position:absolute; top: 50px; left: 850px;">
 		<div id="watch3"></div>
 		<div style="padding-top: 20px; width: 100%; text-align: center">
 			<input type="button" name="start3" value="Start / Resume" onclick="watch3.start()" />
 			<input type="button" name="stop3"  value="Pause"  onclick="watch3.stop()" />
 		</div>
 	</div>
-	<div id="watchWrapper4" style="position:absolute; top: 250px; left: 1250px;">
+	<div id="watchWrapper4" style="position:absolute; top: 50px; left: 1250px;">
 		<div id="watch4"></div>
 		<div style="padding-top: 20px; width: 100%; text-align: center">
 			<input type="button" name="start4" value="Start / Resume" onclick="watch4.start()" />
@@ -92,14 +108,14 @@
 			<input type="button" name="stop21"  value="Pause"  onclick="watch21.stop()" />
 		</div>
 	</div>
-	<div id="watchWrapper22" style="position:absolute; top: 600px; left: 450px;">
+	<div id="watchWrapper22" style="position:absolute; top: 500px; left: 450px;">
 		<div id="watch22"></div>
 		<div style="padding-top: 20px; width: 100%; text-align: center">
 			<input type="button" name="start22" value="Start / Resume" onclick="watch22.start()" />
 			<input type="button" name="stop22"  value="Pause"  onclick="watch22.stop()" />
 		</div>
 	</div>
-	<div id="watchWrapper23" style="position:absolute; top: 650px; left: 850px;">
+	<div id="watchWrapper23" style="position:absolute; top: 500px; left: 850px;">
 		<div id="watch23"></div>
 		<div style="padding-top: 20px; width: 100%; text-align: center">
 			<input type="button" name="start23" value="Start / Resume" onclick="watch23.start()" />

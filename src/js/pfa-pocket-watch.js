@@ -23,6 +23,8 @@ style.innerHTML = '.analogDigitalClockDoW { position: absolute; top: 100px; left
 				+ '.analogDigitalClockDay { position: absolute; top: 195px; left: 70px; width: 60px; height: 60px; text-align: center; color: black; font-size: 23px; } '
 				+ '.analogDigitalClockMonth { position: absolute; top: 240px; left: 151px; width: 60px; height: 60px; text-align: center; color: black; font-size: 20px; } '
 				+ '.analogDigitalClockYear { position: absolute; top: 195px; left: 222px; width: 60px; height: 60px; text-align: center; color: black; font-size: 23px; } '
+				
+				+ '.fimUnselectable { -moz-user-select: -moz-none; -khtml-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; } '
 				+ '';
 document.getElementsByTagName('head')[0].appendChild(style);
 
@@ -197,7 +199,6 @@ function loadTheme_w3(){
  * @param theClock - the clock object
  */
 function w3ClockInit(theClock){
-	console.log("Init the W3 clock");
 	var clockCanvas = document.createElement("canvas");
 	clockCanvas.width = 250;
 	clockCanvas.height = 250;
@@ -218,7 +219,6 @@ function w3ClockInit(theClock){
  * @param clockIndex the index of the clock
  */
 function w3ClockRender(clockIndex){	
-	console.log("Rendering the W3 clock");
 	var theClock = pfaAllianceClocks[clockIndex];
 	var ctx = theClock.canvasContext;
 	
@@ -229,16 +229,26 @@ function w3ClockRender(clockIndex){
     var hour = now.getHours();
     var minute = now.getMinutes();
     var second = now.getSeconds();
-    //hour
-    hour= hour % 12;
-    hour=(hour*Math.PI/6)+(minute*Math.PI/(6*60))+(second*Math.PI/(360*60));
+    
+    // draw date
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'yellow';
+    ctx.font = '16pt Calibri';
+    var dateString = theClock.options.monthsAbbr[now.getMonth()] + " " + now.getDay() + ", " + now.getFullYear();
+    ctx.fillText(dateString, 0, 50);
+    
+    // draw hour
+    hour = hour % 12;
+    hour = (hour*Math.PI/6)+(minute*Math.PI/(6*60))+(second*Math.PI/(360*60));
     drawHand(ctx, hour, radius*0.5, radius*0.07, 'white');
-    //minute
-    minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
+    // draw minute
+    minute = (minute*Math.PI/30)+(second*Math.PI/(30*60));
     drawHand(ctx, minute, radius*0.8, radius*0.07, 'white');
-    // second
-    second=(second*Math.PI/30);
-    drawHand(ctx, second, radius*0.9, radius*0.02, 'red');
+    // draw second
+    if (theClock.options.showSeconds) {
+	    second=(second*Math.PI/30);
+	    drawHand(ctx, second, radius*0.9, radius*0.02, 'red');
+    }
     
     // draw inner dot (10px)
 	ctx.beginPath();
@@ -292,7 +302,7 @@ function analogDigitalClockInit(theClock){
 		// the name of the day
 		theDiv = document.createElement("DIV");
 		theDiv.id = "dayNameDiv" + theClock.clockIndex;
-		theDiv.className = 'analogDigitalClockDoW';
+		theDiv.className = 'analogDigitalClockDoW fimUnselectable';
 		var dayName = theClock.options.days[nowIs.getDay()];
 		theDiv.innerHTML = dayName;  
 		theClock.div.appendChild(theDiv);
@@ -302,7 +312,7 @@ function analogDigitalClockInit(theClock){
 		// the year
 		theDiv = document.createElement("DIV");
 		theDiv.id = "yearDiv" + theClock.clockIndex;
-		theDiv.className = 'analogDigitalClockYear';
+		theDiv.className = 'analogDigitalClockYear fimUnselectable';
 		theClock.div.appendChild(theDiv);
 		theClock[theDiv.id + ".value"] = nowIs.getMonth();
 		var years = new ProgressBar.Circle(theDiv, {
@@ -320,7 +330,7 @@ function analogDigitalClockInit(theClock){
 		// the month
 		theDiv = document.createElement("DIV");
 		theDiv.id = "monthDiv" + theClock.clockIndex;
-		theDiv.className = 'analogDigitalClockMonth';
+		theDiv.className = 'analogDigitalClockMonth fimUnselectable';
 		theClock.div.appendChild(theDiv);
 		theClock[theDiv.id + ".value"] = nowIs.getMonth();
 		var months = new ProgressBar.Circle(theDiv, {
@@ -338,7 +348,7 @@ function analogDigitalClockInit(theClock){
 		// the day
 		theDiv = document.createElement("DIV");
 		theDiv.id = "dayDiv" + theClock.clockIndex;
-		theDiv.className = 'analogDigitalClockDay';
+		theDiv.className = 'analogDigitalClockDay fimUnselectable';
 		theClock.div.appendChild(theDiv);
 		theClock[theDiv.id + ".value"] = nowIs.getDate();
 		var days = new ProgressBar.Circle(theDiv, {
@@ -361,7 +371,7 @@ function analogDigitalClockInit(theClock){
 	// the time
 	theDiv = document.createElement("DIV");
 	theDiv.id = "timeDiv" + theClock.clockIndex;
-	theDiv.className = (theClock.options.showDate)? "analogDigitalClockTimeWithDoW" : "analogDigitalClockTimeWithoutDoW";
+	theDiv.className = ((theClock.options.showDate)? "analogDigitalClockTimeWithDoW" : "analogDigitalClockTimeWithoutDoW") + " fimUnselectable";
 	var dayName = analogDigitalClockFormatTime(nowIs, theClock.options.showSeconds);
 	theDiv.innerHTML = dayName;  
 	theClock.div.appendChild(theDiv); 
