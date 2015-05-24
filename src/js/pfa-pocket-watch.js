@@ -231,11 +231,13 @@ function w3ClockRender(clockIndex){
     var second = now.getSeconds();
     
     // draw date
-    ctx.textAlign = 'center';
-    ctx.fillStyle = 'yellow';
-    ctx.font = '16pt Calibri';
-    var dateString = theClock.options.monthsAbbr[now.getMonth()] + " " + now.getDay() + ", " + now.getFullYear();
-    ctx.fillText(dateString, 0, 50);
+    if (theClock.options.showDate) {
+	    ctx.textAlign = 'center';
+	    ctx.fillStyle = 'yellow';
+	    ctx.font = '16pt Calibri';
+	    var dateString = theClock.options.monthsAbbr[now.getMonth()] + " " + now.getDate() + ", " + now.getFullYear();
+	    ctx.fillText(dateString, 0, 50);
+    }
     
     // draw hour
     hour = hour % 12;
