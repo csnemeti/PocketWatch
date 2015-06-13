@@ -23,6 +23,8 @@ style.innerHTML = '.analogDigitalClockDoW { position: absolute; top: 100px; left
 				+ '.analogDigitalClockDay { position: absolute; top: 195px; left: 70px; width: 60px; height: 60px; text-align: center; color: black; font-size: 23px; } '
 				+ '.analogDigitalClockMonth { position: absolute; top: 240px; left: 151px; width: 60px; height: 60px; text-align: center; color: black; font-size: 20px; } '
 				+ '.analogDigitalClockYear { position: absolute; top: 195px; left: 222px; width: 60px; height: 60px; text-align: center; color: black; font-size: 23px; } '
+				+ '.analogDigitalClockSound { position: absolute; top: 205px; left: 170px; width: 32px; height: 32px; text-align: center; } '
+				+ '.w3ClockSound { position: absolute; top: 210px; left: 200px; width: 32px; height: 32px; text-align: center; } '
 				
 				+ '.fimUnselectable { -moz-user-select: -moz-none; -khtml-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; } '
 				+ '';
@@ -37,7 +39,7 @@ function getDefaultOptions(){
 		// defines the look of the watch. Contains sizes, background image, and various settings.
 		theme : "analog-digital",
 		// put some tic-tac sound in page
-		sound : false,
+		sound : "off",
 		// show the seconds on watch. NOTE: some themes might ignore this property.
 		showSeconds : true,
 		// show date (or part of date: day & month) on watch. NOTE: some themes might ignore this property.
@@ -67,27 +69,75 @@ function pfaAllianceClock(divId, options){
 	console.log("Options: ", this.options);
 	this.theme = loadTheme(this.options.theme);
 	this.timer = null;
+	this["soundPlaying"] = false;
 	console.log("Theme options: ", this.theme);
 	configureDiv(this.div, this.theme);
-	// call theme init method
-	this.theme.initMethod(this);
-	
-	
-	// now we should have the clock congigured, it's safe to store it in the list
-	pfaAllianceClocks[this.clockIndex] = this;
 	
 	// start & stop functions
-	this.start = function(){
-		if (this.timer == null){
-			this.timer = setInterval(this.theme.renderMethod, 1000, this.clockIndex); 
+	this.start = function() {
+		// this is guard for preventing double start
+		if (this.timer == null) {						
+			this.timer = setInterval(this.theme.renderMethod, 1000, this.clockIndex);
+			if (this.options.sound == "onStart" && this.theme.startSound != null) {
+				this.theme.startSound(this);
+			}
 		}
 	};
-	this.stop = function(){
-		if (this.timer != null){
+	this.stop = function() {
+		if (this.timer != null) {
 			clearInterval(this.timer);
 			this.timer = null;
+			if (this.theme.stopSound != null) {
+				this.theme.stopSound(this);
+			}
 		}
-	};	
+	};
+	
+	// when sound is pressed
+	self = this;
+	this.toogleSound = function() {
+		console.log("Toogle sound");
+		if (self.timer != null) {
+			// start if not running, stop if running
+			if (self["soundPlaying"]) {
+				if (self.theme.stopSound != null) {
+					self.theme.stopSound(self);
+				}
+			} else {
+				if (self.theme.startSound != null) {
+					self.theme.startSound(self);
+				}
+			}
+			// stop it if timer is not running anymore
+		} else if (self.theme.stopSound != null) {
+			self.theme.stopSound(self);
+		}
+	};
+	
+	// when mouse over & out is asked
+	if (this.options.sound == "onHover") {
+		var self = this;
+		this.div.addEventListener('mouseenter', function(){
+			console.log("Mouse in");
+			if (self.timer != null) {
+				console.log("Playing sound");
+				self.theme.startSound(self);
+			}
+		});
+		this.div.addEventListener('mouseleave', function(){
+			console.log("Mouse out");
+			if (self.timer != null) {
+				console.log("Stopping sound");
+				self.theme.stopSound(self);
+			}
+		});
+	}
+
+	// call theme init method
+	this.theme.initMethod(this);	
+	
+	// now we should have the clock configured, it's safe to store it in the list
+	pfaAllianceClocks[this.clockIndex] = this;
 }
 // ----------------- Private functions ---------------------
 /** All clocks from the page. */
@@ -132,6 +182,17 @@ function handleOptions(options){
 	for (var prop in defaultOptions){
 		fixedOptions[prop] = getOptionsValue(options, prop, defaultOptions[prop]);
 	}
+	// handle sound values
+	var sound = fixedOptions.sound.toLowerCase();
+	if ("onsoundon" == sound) {
+		fixedOptions.sound = 'onSoundOn';
+	} else if ("onhover" == sound) {
+		fixedOptions.sound = 'onHover';
+	} else if ("onstart" == sound) {
+		fixedOptions.sound = 'onStart';
+	} else {
+		fixedOptions.sound = 'off';
+	} 
 	return fixedOptions;
 }
 function getOptionsValue(options, key, defaultValue){
@@ -143,6 +204,34 @@ function getOptionsValue(options, key, defaultValue){
 		}
 	}
 	return value;
+}
+/**
+ * Generic method for start playing the sound
+ * @param theClock the clock
+ */
+function genericStartSound(theClock) {
+	console.log("Starting sound...");
+	if (theClock["sound"] != null) {
+		theClock["sound"].play();
+		theClock["soundPlaying"] = true;
+		if (theClock["soundImg"]) {
+			theClock["soundImg"].src = urlStart + "pfa-pocket-watch-themes/speaker_on_32.png";
+		}
+	}
+}
+/**
+ * Generic method for stop playing the sound
+ * @param theClock the clock
+ */
+function genericStopSound(theClock) {
+	console.log("Stop sound...");
+	if (theClock["sound"] != null) {
+		theClock["sound"].pause();
+		theClock["soundPlaying"] = false;
+		if (theClock["soundImg"]) {
+			theClock["soundImg"].src = urlStart + "pfa-pocket-watch-themes/speaker_off_32.png";
+		}
+	}
 }
 
 function twoDigits(number){
@@ -191,7 +280,9 @@ function loadTheme_w3(){
 		backgroundColor :  null,
 		backgroundImage : "url('" + urlStart + "pfa-pocket-watch-themes/w3.jpg')",
 		initMethod : w3ClockInit,
-		renderMethod : w3ClockRender
+		renderMethod : w3ClockRender,
+		startSound : genericStartSound,
+		stopSound : genericStopSound
 	};
 }
 /**
@@ -213,6 +304,35 @@ function w3ClockInit(theClock){
 	theClock.div.appendChild(clockCanvas);
 	theClock.canvasContext = clockCanvas.getContext('2d');
 	theClock.canvasContext.translate(125, 125);
+	
+	// handle sound DIV + audio
+	var soundOption = theClock.options.sound;
+	if (soundOption == "onStart" || soundOption == "onSoundOn") {
+		theDiv = document.createElement("DIV");
+		theDiv.id = "soundDiv" + theClock.clockIndex;
+		theDiv.className = "w3ClockSound fimUnselectable";
+		
+		var theImage = document.createElement("IMG")
+		theImage.id = "soundImg" + theClock.clockIndex;
+		theImage.src = urlStart + "pfa-pocket-watch-themes/speaker_off_32.png";
+		theImage.style.cursor = "pointer";
+		theImage.addEventListener('click', theClock.toogleSound);
+		theClock["soundImg"] = theImage;
+		theDiv.appendChild(theImage);
+		
+		theClock.div.appendChild(theDiv);
+	}
+	if (soundOption == "onStart" || soundOption == "onSoundOn" || soundOption == "onHover") {
+		var theSound = document.createElement("AUDIO");
+		theSound.style.display = "none";
+		theSound.loop = true;
+		theSound.src= urlStart + "pfa-pocket-watch-themes/clock-ticking-2.mp3";
+		theClock.div.appendChild(theSound);
+		theClock["sound"] = theSound;
+	}
+	
+	// make the watch display the time
+	w3ClockRenderClock(theClock);
 }
 /**
  * Render the time on clock. 
@@ -220,6 +340,9 @@ function w3ClockInit(theClock){
  */
 function w3ClockRender(clockIndex){	
 	var theClock = pfaAllianceClocks[clockIndex];
+	w3ClockRenderClock(theClock);
+}
+function w3ClockRenderClock(theClock){	
 	var ctx = theClock.canvasContext;
 	
 	ctx.clearRect(-125, -125, 250, 250);
@@ -288,7 +411,9 @@ function loadTheme_analog_digital(){
 		backgroundColor :  null,
 		backgroundImage : "url('" + urlStart + "pfa-pocket-watch-themes/analog-digital.png')",
 		initMethod : analogDigitalClockInit,
-		renderMethod : analogDigitalClockRender
+		renderMethod : analogDigitalClockRender,
+		startSound : genericStartSound,
+		stopSound : genericStopSound
 	};
 }
 /**
@@ -370,6 +495,7 @@ function analogDigitalClockInit(theClock){
 		theClock["dayName.value"] = -1;
 	}	
 	console.log("dayNameDiv: ", theDiv);
+
 	// the time
 	theDiv = document.createElement("DIV");
 	theDiv.id = "timeDiv" + theClock.clockIndex;
@@ -378,6 +504,32 @@ function analogDigitalClockInit(theClock){
 	theDiv.innerHTML = dayName;  
 	theClock.div.appendChild(theDiv); 
 	theClock[theDiv.id] = theDiv;
+	
+	// handle sound DIV + audio
+	var soundOption = theClock.options.sound;
+	if (soundOption == "onStart" || soundOption == "onSoundOn") {
+		theDiv = document.createElement("DIV");
+		theDiv.id = "soundDiv" + theClock.clockIndex;
+		theDiv.className = "analogDigitalClockSound fimUnselectable";
+		
+		var theImage = document.createElement("IMG")
+		theImage.id = "soundImg" + theClock.clockIndex;
+		theImage.src = urlStart + "pfa-pocket-watch-themes/speaker_off_32.png";
+		theImage.style.cursor = "pointer";
+		theImage.addEventListener('click', theClock.toogleSound);
+		theClock["soundImg"] = theImage;
+		theDiv.appendChild(theImage);
+		
+		theClock.div.appendChild(theDiv);
+	}
+	if (soundOption == "onStart" || soundOption == "onSoundOn" || soundOption == "onHover") {
+		var theSound = document.createElement("AUDIO");
+		theSound.style.display = "none";
+		theSound.loop = true;
+		theSound.src= urlStart + "pfa-pocket-watch-themes/clock-ticking-2.mp3";
+		theClock.div.appendChild(theSound);
+		theClock["sound"] = theSound;
+	}
 }
 /**
  * Render the time on clock. 
