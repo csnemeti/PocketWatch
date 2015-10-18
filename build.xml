@@ -82,7 +82,9 @@
 				tofile="${dist.dir}/pocket-watch-${build.version}.zip.${BRANCH}.${BUILD_ID}"/>
 		<scp sftp="true" trust="yes" knownhosts="./known"  
 				todir="${sftp.userid}:${fim.passwd}@${sftp.host}:/home/${sftp.userid}/docs/">
-			<fileset dir="${dist.dir}"/>
+			<fileset dir="${dist.dir}">
+            	<include name="*.*" />
+			</fileset>
 		</scp>
 	</target>
 </project>
