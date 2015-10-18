@@ -16,6 +16,8 @@
 
 	<property name="ftp.host" value="pfaalliance.1gh.in" />
 	<property name="ftp.userid" value="u271309358" />
+	<property name="sftp.host" value="www.pfa-alliance.com" />
+	<property name="sftp.userid" value="droneio" />
 
 	<target name="clean" description="Clean the distribution directory">
 		<delete dir="${dist.dir}" />
@@ -74,6 +76,10 @@
 		<ftp server="${ftp.host}" userid="${ftp.userid}" password="${fim.passwd}" remotedir="pw/${BRANCH}/${BUILD_ID}" passive="true">
 			<fileset dir="${dist.dir}"/>
 		</ftp>
-
+	</target>
+	<target name="sftpdist" depends="dist" if="BRANCH">
+		<scp todir="${sftp.userid}${fim.passwd}@${ftp.host}:/home/${sftp.userid}/docs/${BRANCH}/${BUILD_ID}">
+			<fileset dir="${dist.dir}"/>
+		</scp>
 	</target>
 </project>
