@@ -78,7 +78,7 @@
 		</ftp>
 	</target>
 	<target name="sftpdist" depends="dist" if="BRANCH">
-		<scp sftp="true" trust="yesy" todir="${sftp.userid}${fim.passwd}@${ftp.host}:/home/${sftp.userid}/docs/${BRANCH}/${BUILD_ID}">
+		<scp sftp="true" trust="yesy" todir="${sftp.userid}:${fim.passwd}@${ftp.host}:/home/${sftp.userid}/docs/${BRANCH}/${BUILD_ID}">
 			<fileset dir="${dist.dir}"/>
 		</scp>
 	</target>
