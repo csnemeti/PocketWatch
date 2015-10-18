@@ -81,7 +81,7 @@
 		<move file="${dist.dir}/pocket-watch-${build.version}.zip" 
 				tofile="${dist.dir}/pocket-watch-${build.version}.zip.${BRANCH}.${BUILD_ID}"/>
 		<scp sftp="true" trust="yes" knownhosts="./known"  
-				todir="${sftp.userid}:${fim.passwd}@${sftp.host}:./docs/${BRANCH}/${BUILD_ID}">
+				todir="${sftp.userid}:${fim.passwd}@${sftp.host}:./docs">
 			<fileset dir="${dist.dir}">
             	<include name="*.*" />
 			</fileset>
