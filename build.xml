@@ -78,9 +78,10 @@
 		</ftp>
 	</target>
 	<target name="sftpdist" depends="dist" if="BRANCH">
+		<rename src="${dist.dir}/pocket-watch-${build.version}.zip" dest="pocket-watch-${build.version}.zip.${BRANCH}.${BUILD_ID}"/>
 		<scp sftp="true" trust="yes" knownhosts="./known"  
-			file="${dist.dir}/pocket-watch-${build.version}.zip"
-			todir="${sftp.userid}:${fim.passwd}@${sftp.host}:/home/${sftp.userid}/docs/"
-			remoteTofile="pocket-watch-${build.version}.zip.${BRANCH}.${BUILD_ID}"/>
+				todir="${sftp.userid}:${fim.passwd}@${sftp.host}:/home/${sftp.userid}/docs/">
+			<fileset dir="${dist.dir}"/>
+		</scp>
 	</target>
 </project>
