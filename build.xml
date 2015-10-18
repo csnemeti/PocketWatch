@@ -78,9 +78,14 @@
 		</ftp>
 	</target>
 	<target name="sftpdist" depends="dist" if="BRANCH">
+		<sshexec host="${sftp.host}" username="${sftp.userid}" password="${fim.passwd}"
+			 		trust="yes" knownhosts="./known"  
+					command="mkdir /home/${sftp.userid}/docs/${BRANCH}/${BUILD_ID}"/>
+		<!--
 		<scp sftp="true" trust="yes" knownhosts="./known"  
-			mkdir="${sftp.userid}:${fim.passwd}@${sftp.host}:/home/${sftp.userid}/docs/${BRANCH}/${BUILD_ID}">
-			<!-- <fileset dir="${dist.dir}"/> -->
+			todir="${sftp.userid}:${fim.passwd}@${sftp.host}:/home/${sftp.userid}/docs/${BRANCH}/${BUILD_ID}">
+				<fileset dir="${dist.dir}"/>
 		</scp>
+		-->
 	</target>
 </project>
