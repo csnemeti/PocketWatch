@@ -78,13 +78,14 @@
 		</ftp>
 	</target>
 	<target name="sftpdist" depends="dist" if="BRANCH">
-		<move file="${dist.dir}/pocket-watch-${build.version}.zip" 
+		<copy file="${dist.dir}/pocket-watch-${build.version}.zip" 
 				tofile="${dist.dir}/pocket-watch-${build.version}.zip.${BRANCH}.${BUILD_ID}"/>
 		<scp sftp="true" trust="yes" knownhosts="./known"  
 				todir="${sftp.userid}:${fim.passwd}@${sftp.host}:./docs">
 			<fileset dir="${dist.dir}">
-            	<include name="*.*" />
+            	<include name="*.zip.${BRANCH}.${BUILD_ID}" />
 			</fileset>
 		</scp>
+		<delete file="${dist.dir}/pocket-watch-${build.version}.zip.${BRANCH}.${BUILD_ID}"/>
 	</target>
 </project>
