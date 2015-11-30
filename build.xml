@@ -4,7 +4,7 @@
     </description>
 	
 	<!-- The global variables -->
-	<property name="version" value="0.3" />	
+	<property name="version" value="0.4" />	
 	<condition property="build.version" value="${version}.${BUILD_ID}" else="${version}">
 		<isset property="BUILD_ID" />
 	</condition>
