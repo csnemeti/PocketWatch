@@ -8,11 +8,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pocket Watch test page</title>
 
+	<style type="text/css">
+		h2.themeName {
+			display: inline;
+		}
+		div.allButtons {
+			width: 300px;
+			text-align: center;
+			display: inline;
+			padding-left: 20px; 
+		}
+	</style>
+
 	<script type="text/javascript" src="js/pfa-pocket-watch-@VERSION@.js"></script>
 
 	<script type="text/javascript">	
 	var watch1 = null, watch2 = null, watch3 = null, watch4 = null;
 	var watch21 = null, watch22 = null, watch23 = null;
+	var watch31 = null, watch32 = null, watch33 = null;
+	var watch41 = null, watch42 = null, watch43 = null;
+		function triggerClickOnElements(theClassName) {
+			var x = document.getElementsByClassName(theClassName);
+			for (i = 0; i < x.length; i++) {
+			    x[i].click();
+			}
+		}
+	
 		function setUpWatches(){
 			watch1 = new pfaAllianceClock('watch1', null);
 			
@@ -66,64 +87,175 @@
 					sound: "onStart"
 				};
 			watch23 = new pfaAllianceClock('watch23', opt23);
+
+			var opt31 = {
+					theme: "w4d",
+					showSeconds : false,
+					showDate : false,
+					sound: "off"
+				};
+			watch31 = new pfaAllianceClock('watch31', opt31);
+
+			var opt32 = {
+					theme: "w4d",
+					showSeconds : true,
+					sound: "onHover"
+				};
+			watch32 = new pfaAllianceClock('watch32', opt32);
+
+			var opt33 = {
+					theme: "w4d",
+					showSeconds : true,
+					showDate : true,
+					sound: "onStart"
+				};
+			watch33 = new pfaAllianceClock('watch33', opt33);
 		
+
+			var opt41 = {
+					theme: "w4dm",
+					showSeconds : false,
+					sound: "off"
+				};
+			watch41 = new pfaAllianceClock('watch41', opt41);
+
+			var opt42 = {
+					theme: "w4dm",
+					showSeconds : true,
+					sound: "onHover"
+				};
+			watch42 = new pfaAllianceClock('watch42', opt42);
+
+			var opt43 = {
+					theme: "w4dm",
+					showSeconds : true,
+					showDate : true,
+					sound: "onStart"
+				};
+			watch43 = new pfaAllianceClock('watch43', opt43);
 		}
 	</script>
 </head>
 <body onLoad="setUpWatches()">
-	<h2>Theme: analog-digital</h2>
+	<h2 class="themeName">Theme: analog-digital</h2>
+	<div class="allButtons">
+		<input type="button" name="start1" value="Start / Resume all" onclick="triggerClickOnElements('ad1Start')" />
+		<input type="button" name="stop1"  value="Pause all"  onclick="triggerClickOnElements('ad1Stop')" />
+	</div>
 	<div style="width: 1800px; height: 450px; padding: 0px 0px 0px 50px">
 		<div id="watchWrapper1" style="position: relative; float: left; width: 400px">
 			<div id="watch1"></div>
 			<div style="padding-top: 20px; width: 100%; text-align: center">
-				<input type="button" name="start1" value="Start / Resume" onclick="watch1.start()" />
-				<input type="button" name="stop1"  value="Pause"  onclick="watch1.stop()" />
+				<input type="button" name="start1" value="Start / Resume" class="ad1Start" onclick="watch1.start()" />
+				<input type="button" name="stop1"  value="Pause" class="ad1Stop" onclick="watch1.stop()" />
 			</div>
 		</div>
 		<div id="watchWrapper2" style="position: relative; float: left; width: 400px">
 			<div id="watch2"></div>
 			<div style="padding-top: 20px; width: 100%; text-align: center">
-				<input type="button" name="start2" value="Start / Resume" onclick="watch2.start()" />
-				<input type="button" name="stop2"  value="Pause"  onclick="watch2.stop()" />
+				<input type="button" name="start2" value="Start / Resume" class="ad1Start" onclick="watch2.start()" />
+				<input type="button" name="stop2"  value="Pause" class="ad1Stop" onclick="watch2.stop()" />
 			</div>
 		</div>
 		<div id="watchWrapper3" style="position: relative; float: left; width: 400px">
 			<div id="watch3"></div>
 			<div style="padding-top: 20px; width: 100%; text-align: center">
-				<input type="button" name="start3" value="Start / Resume" onclick="watch3.start()" />
-				<input type="button" name="stop3"  value="Pause"  onclick="watch3.stop()" />
+				<input type="button" name="start3" value="Start / Resume" class="ad1Start" onclick="watch3.start()" />
+				<input type="button" name="stop3"  value="Pause" class="ad1Stop" onclick="watch3.stop()" />
 			</div>
 		</div>
 		<div id="watchWrapper4" style="position: relative; float: left; width: 400px">
 			<div id="watch4"></div>
 			<div style="padding-top: 20px; width: 100%; text-align: center">
-				<input type="button" name="start4" value="Start / Resume" onclick="watch4.start()" />
-				<input type="button" name="stop4"  value="Pause"  onclick="watch4.stop()" />
+				<input type="button" name="start4" value="Start / Resume" class="ad1Start" onclick="watch4.start()" />
+				<input type="button" name="stop4"  value="Pause" class="ad1Stop" onclick="watch4.stop()" />
 			</div>
 		</div>
 	</div>
 	<hr />
-	<h2>Theme: w3</h2>
+	<h2 class="themeName">Theme: w3</h2>
+	<div class="allButtons">
+		<input type="button" name="start1" value="Start / Resume all" onclick="triggerClickOnElements('w3Start')" />
+		<input type="button" name="stop1"  value="Pause all"  onclick="triggerClickOnElements('w3Stop')" />
+	</div>
 	<div style="width: 1800px; height: 350px; padding: 0px 0px 0px 50px">
 		<div id="watchWrapper21" style="position: relative; float: left; width: 300px">
 			<div id="watch21"></div>
 			<div style="padding-top: 20px; width: 100%; text-align: center">
-				<input type="button" name="start21" value="Start / Resume" onclick="watch21.start()" />
-				<input type="button" name="stop21"  value="Pause"  onclick="watch21.stop()" />
+				<input type="button" name="start21" value="Start / Resume" class="w3Start" onclick="watch21.start()" />
+				<input type="button" name="stop21"  value="Pause" class="w3Stop" onclick="watch21.stop()" />
 			</div>
 		</div>
 		<div id="watchWrapper22" style="position: relative; float: left; width: 300px">
 			<div id="watch22"></div>
 			<div style="padding-top: 20px; width: 100%; text-align: center">
-				<input type="button" name="start22" value="Start / Resume" onclick="watch22.start()" />
-				<input type="button" name="stop22"  value="Pause"  onclick="watch22.stop()" />
+				<input type="button" name="start22" value="Start / Resume" class="w3Start" onclick="watch22.start()" />
+				<input type="button" name="stop22"  value="Pause" class="w3Stop" onclick="watch22.stop()" />
 			</div>
 		</div>
 		<div id="watchWrapper23" style="position: relative; float: left; width: 300px">
 			<div id="watch23"></div>
 			<div style="padding-top: 20px; width: 100%; text-align: center">
-				<input type="button" name="start23" value="Start / Resume" onclick="watch23.start()" />
-				<input type="button" name="stop23"  value="Pause"  onclick="watch23.stop()" />
+				<input type="button" name="start23" value="Start / Resume" class="w3Start" onclick="watch23.start()" />
+				<input type="button" name="stop23"  value="Pause" class="w3Stop" onclick="watch23.stop()" />
+			</div>
+		</div>
+	</div>
+	<hr />
+	<h2 class="themeName">Theme: w4d</h2>
+	<div class="allButtons">
+		<input type="button" value="Start / Resume all" onclick="triggerClickOnElements('w4dStart')" />
+		<input type="button" value="Pause all"  onclick="triggerClickOnElements('w4dStart')" />
+	</div>
+	<div style="width: 1800px; height: 350px; padding: 0px 0px 0px 50px">
+		<div id="watchWrapper31" style="position: relative; float: left; width: 300px">
+			<div id="watch31"></div>
+			<div style="padding-top: 20px; width: 100%; text-align: center">
+				<input type="button" value="Start / Resume" class="w4dStart" onclick="watch31.start()" />
+				<input type="button" value="Pause" class="w4dStop" onclick="watch31.stop()" />
+			</div>
+		</div>
+		<div id="watchWrapper32" style="position: relative; float: left; width: 300px">
+			<div id="watch32"></div>
+			<div style="padding-top: 20px; width: 100%; text-align: center">
+				<input type="button" value="Start / Resume" class="w4dStart" onclick="watch32.start()" />
+				<input type="button" value="Pause" class="w4dStop" onclick="watch32.stop()" />
+			</div>
+		</div>
+		<div id="watchWrapper33" style="position: relative; float: left; width: 300px">
+			<div id="watch33"></div>
+			<div style="padding-top: 20px; width: 100%; text-align: center">
+				<input type="button" value="Start / Resume" class="w4dStart" onclick="watch33.start()" />
+				<input type="button" value="Pause" class="w4dStop" onclick="watch33.stop()" />
+			</div>
+		</div>
+	</div>
+	<hr />
+	<h2 class="themeName">Theme: w4dm</h2>
+	<div class="allButtons">
+		<input type="button" value="Start / Resume all" onclick="triggerClickOnElements('w4dmStart')" />
+		<input type="button" value="Pause all"  onclick="triggerClickOnElements('w4dmStart')" />
+	</div>
+	<div style="width: 1800px; height: 350px; padding: 0px 0px 0px 50px">
+		<div id="watchWrapper41" style="position: relative; float: left; width: 300px">
+			<div id="watch41"></div>
+			<div style="padding-top: 20px; width: 100%; text-align: center">
+				<input type="button" value="Start / Resume" class="w4dmStart" onclick="watch41.start()" />
+				<input type="button" value="Pause" class="w4dmStop" onclick="watch41.stop()" />
+			</div>
+		</div>
+		<div id="watchWrapper42" style="position: relative; float: left; width: 300px">
+			<div id="watch42"></div>
+			<div style="padding-top: 20px; width: 100%; text-align: center">
+				<input type="button" value="Start / Resume" class="w4dmStart" onclick="watch42.start()" />
+				<input type="button" value="Pause" class="w4dmStop" onclick="watch42.stop()" />
+			</div>
+		</div>
+		<div id="watchWrapper43" style="position: relative; float: left; width: 300px">
+			<div id="watch43"></div>
+			<div style="padding-top: 20px; width: 100%; text-align: center">
+				<input type="button" value="Start / Resume" class="w4dmStart" onclick="watch43.start()" />
+				<input type="button" value="Pause" class="w4dmStop" onclick="watch43.stop()" />
 			</div>
 		</div>
 	</div>

@@ -25,6 +25,7 @@ style.innerHTML = '.analogDigitalClockDoW { position: absolute; top: 100px; left
 				+ '.analogDigitalClockYear { position: absolute; top: 195px; left: 222px; width: 60px; height: 60px; text-align: center; color: black; font-size: 23px; } '
 				+ '.analogDigitalClockSound { position: absolute; top: 205px; left: 170px; width: 32px; height: 32px; text-align: center; } '
 				+ '.w3ClockSound { position: absolute; top: 210px; left: 200px; width: 32px; height: 32px; text-align: center; } '
+				+ '.w4Day { position: absolute; top: 110px; left: 200px; width: 100px; height: 20px; text-align: center; backgrous-color: white} '
 				
 				+ '.fimUnselectable { -moz-user-select: -moz-none; -khtml-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; } '
 				+ '';
@@ -67,7 +68,7 @@ function pfaAllianceClock(divId, options){
 	// handle the options
 	this.options = handleOptions(options);
 	console.log("Options: ", this.options);
-	this.theme = loadTheme(this.options.theme);
+	this.theme = loadTheme(this.options);
 	this.timer = null;
 	this["soundPlaying"] = false;
 	console.log("Theme options: ", this.theme);
@@ -148,9 +149,12 @@ var pfaAllianceClocks = new Array();
  * @param themeName - the name of the theme
  * @return the theme specific options (size, background, border, etc.)
  */
-function loadTheme(themeName){
-	var functionName = "loadTheme_" + themeName.replace('-', '_') + "()";
-	return eval(functionName);
+function loadTheme(options){	
+	var functionName = "loadTheme_" + options.theme.replace('-', '_');
+	console.log("Loading: ", functionName);
+	var fn = window[functionName];
+	console.log("Loading: ", functionName, " -> ", fn);
+	return fn.apply(null, [options]);
 }
 /**
  * Configure the DIV that was sent as parameter...
@@ -267,6 +271,107 @@ function getDaysSinceBeginningOfYear(nowIs){
 	var oneDay = 1000 * 60 * 60 * 24;
 	return Math.floor(diff / oneDay);
 }
+//--------------- W4d & W4dm ----------------------------------------
+function loadTheme_w4d(options){
+	var bgImage = (options.showDate)? "w4d.jpg" : "w3.jpg";
+	return {
+		width : 250,
+		height : 250,
+		background :  null,
+		backgroundColor :  null,
+		backgroundImage : "url('" + urlStart + "pfa-pocket-watch-themes/" + bgImage + "')",
+		initMethod : w4dClockInit,
+		renderMethod : w4dClockRender,
+		startSound : genericStartSound,
+		stopSound : genericStopSound
+	};
+}
+function loadTheme_w4dm(options){
+	var bgImage = (options.showDate)? "w4dm.jpg" : "w3.jpg";
+	return {
+		width : 250,
+		height : 250,
+		background :  null,
+		backgroundColor :  null,
+		backgroundImage : "url('" + urlStart + "pfa-pocket-watch-themes/" + bgImage + "')",
+		initMethod : w4dmClockInit,
+		renderMethod : w4dmClockRender,
+		startSound : genericStartSound,
+		stopSound : genericStopSound
+	};
+}
+/**
+ * Init the clock for this theme.
+ * @param theClock - the clock object
+ */
+function w4dClockInit(theClock){
+	w34ClockBaseInit(theClock);
+	// make the watch display the time
+	w4dClockRenderClock(theClock);
+}
+/**
+ * Init the clock for this theme.
+ * @param theClock - the clock object
+ */
+function w4dmClockInit(theClock){
+	w34ClockBaseInit(theClock);
+	// make the watch display the time
+	w4dmClockRenderClock(theClock);
+}
+/**
+ * Render the time on clock. 
+ * @param clockIndex the index of the clock
+ */
+function w4dClockRender(clockIndex){	
+	var theClock = pfaAllianceClocks[clockIndex];
+	w4dClockRenderClock(theClock);
+}
+/**
+ * Render the time on clock. 
+ * @param clockIndex the index of the clock
+ */
+function w4dmClockRender(clockIndex){	
+	var theClock = pfaAllianceClocks[clockIndex];
+	w4dmClockRenderClock(theClock);
+}
+
+function w4dClockRenderClock(theClock){	
+	var ctx = theClock.canvasContext;
+	var now = new Date();
+	
+	ctx.clearRect(-125, -125, 250, 250);
+    
+    // draw date
+    if (theClock.options.showDate) {
+	    ctx.textAlign = 'center';
+	    ctx.fillStyle = 'black';
+	    ctx.font = 'bold 14px Calibri';
+	    var dateString = now.getDate();
+	    ctx.fillText(dateString, 78, 4);
+    }
+    
+    // draw the hands
+    w34ClockRenderHands(theClock, now);
+}
+
+function w4dmClockRenderClock(theClock){	
+	var ctx = theClock.canvasContext;
+	var now = new Date();
+	
+	ctx.clearRect(-125, -125, 250, 250);
+    
+    // draw date
+    if (theClock.options.showDate) {
+	    ctx.textAlign = 'center';
+	    ctx.fillStyle = 'black';
+	    ctx.font = 'bold 14px Calibri';
+	    var dateString = theClock.options.monthsAbbr[now.getMonth()] + " " + now.getDate();
+	    ctx.fillText(dateString, 62, 4);
+    }
+    
+    // draw the hands
+    w34ClockRenderHands(theClock, now);
+}
 // --------------- W3 -----------------------------------------------
 /**
  * Load the theme specific options.
@@ -290,6 +395,11 @@ function loadTheme_w3(){
  * @param theClock - the clock object
  */
 function w3ClockInit(theClock){
+	w34ClockBaseInit(theClock);
+	// make the watch display the time
+	w3ClockRenderClock(theClock);
+}
+function w34ClockBaseInit(theClock){
 	var clockCanvas = document.createElement("canvas");
 	clockCanvas.width = 250;
 	clockCanvas.height = 250;
@@ -330,9 +440,6 @@ function w3ClockInit(theClock){
 		theClock.div.appendChild(theSound);
 		theClock["sound"] = theSound;
 	}
-	
-	// make the watch display the time
-	w3ClockRenderClock(theClock);
 }
 /**
  * Render the time on clock. 
@@ -346,12 +453,7 @@ function w3ClockRenderClock(theClock){
 	var ctx = theClock.canvasContext;
 	
 	ctx.clearRect(-125, -125, 250, 250);
-	
-	var radius = 110;
 	var now = new Date();
-    var hour = now.getHours();
-    var minute = now.getMinutes();
-    var second = now.getSeconds();
     
     // draw date
     if (theClock.options.showDate) {
@@ -361,6 +463,18 @@ function w3ClockRenderClock(theClock){
 	    var dateString = theClock.options.monthsAbbr[now.getMonth()] + " " + now.getDate() + ", " + now.getFullYear();
 	    ctx.fillText(dateString, 0, 50);
     }
+    
+    // draw the hands
+    w34ClockRenderHands(theClock, now);
+}
+
+function w34ClockRenderHands(theClock, now){	
+	var ctx = theClock.canvasContext;
+	
+	var radius = 110;
+    var hour = now.getHours();
+    var minute = now.getMinutes();
+    var second = now.getSeconds();
     
     // draw hour
     hour = hour % 12;
@@ -387,6 +501,7 @@ function w3ClockRenderClock(theClock){
 	ctx.fillStyle = 'black';
 	ctx.fill();
 }
+
 function drawHand(ctx, pos, length, width, color) {
     ctx.beginPath();
     ctx.strokeStyle = color;
